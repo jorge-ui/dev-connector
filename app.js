@@ -1,11 +1,20 @@
+// Dev packages
+  var colors = require('colors');
 //================================================
 // NPM PACKAGES
-var express = require('express'),
+var seedDB = require('./seedDB');
+    express = require('express'),
     app = express(),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    bodyParser = require('body-parser'),
+    passport = require('passport');
 
 //================================================
-// ROUTES
+// APP CONFIG
+  // Use body parser
+  app.use(bodyParser.urlencoded({extended: false}));
+  app.use(bodyParser.json());
+  // Require routes
   var users = require('./routes/api/users');
   var profiles = require('./routes/api/profiles');
   var posts = require('./routes/api/posts');
@@ -16,16 +25,23 @@ var express = require('express'),
   var dbURL = require('./config/keys').mongoURL;
   // DB connect
   mongoose.connect(dbURL,{useNewUrlParser: true})
-    .then(() => console.log('MongoDB connected!'))
+    .then(() => {
+      console.log('MongoDB connected!'.green)
+      seedDB();
+    })
     .catch(err => console.log(err));
 
 //================================================
-app.get('/', (req, res) => {res.send('Boom!')});
+// Passport middleware
+  app.use(passport.initialize());
+// Passport config strategy
+  require('./config/passport')(passport);
 
 // Use routes
-app.use('/api/users', users);
-app.use('/api/profiles', profiles);
-app.use('/api/posts', posts);
+  app.get('/', (req, res) => res.json({msg: "Landing page"}));
+  app.use('/api/users', users);
+  app.use('/api/profiles', profiles);
+  app.use('/api/posts', posts);
 
 //================================================
 var PORT = process.env.PORT || 5500;
