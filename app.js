@@ -22,9 +22,11 @@ var seedDB = require('./seedDB');
 //================================================
 // DATABASE SETUP
   // DB url
-  var dbURL = require('./config/keys').mongoURL;
+  if (process.env.DATABASEURL === undefined || process.env.DATABASEURL === null) {
+    process.env.DATABASEURL = require('./config/keys').mongoURL;
+  }
   // DB connect
-  mongoose.connect(dbURL,{useNewUrlParser: true})
+  mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true})
     .then(() => {
       console.log('MongoDB connected!'.green)
       seedDB();
