@@ -1,11 +1,14 @@
 var validator = require('validator');
 var isEmpty = require('./isEmpty');
+var User = require('../models/User');
 
 module.exports = function validateRegisterInput(data) {
    let errors = {};
-   if(isEmpty(data.name)) data.name = "";
-   if(isEmpty(data.email)) data.email = "";
-   if(isEmpty(data.password)) data.password = "";
+   // Define schema obj to validate
+   var dataKeys = Object.keys(User.schema.obj);
+   dataKeys.forEach((key) => {
+      if(isEmpty(data[key])) data[key] = "";
+   })
    if(isEmpty(data.password2)) data.password2 = "";
 
    // name field:

@@ -48,11 +48,11 @@ var ProfileSchema = new Schema({
          type: String
       },
       from: {
-         type: String,
+         type: Date,
          required: true
       },
       to: {
-         type: String
+         type: Date
       },
       current: {
          type: Boolean,
@@ -85,11 +85,11 @@ var ProfileSchema = new Schema({
       }
    }],
    social: {
-      youtube: String,
-      twitter: String,
-      facebook: String,
-      likedin: String,
-      instagram: String,
+      youtube: {type: String},
+      twitter: {type: String},
+      facebook: {type: String},
+      likedin: {type: String},
+      instagram: {type: String}
    },
    date: {
       type: Date,
