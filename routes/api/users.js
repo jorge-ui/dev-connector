@@ -197,18 +197,31 @@ router.post('/picture', passport.authenticate('jwt', {session: false}), async (r
 // @route   DELETE api/user/picture
 // @info    Dlete current picture
 // @access  Private
-router.delete('/picture', passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.delete('/picture', passport.authenticate('jwt', {session: false}), (req, res) => {
+   if(!req.user.picture.public_id) {
+      User.findById(req.user.id)
+         .then((user) => {
+            user.picture = {
+               url: null,
+               public_id: null
+            }
+            user.save().then((saved) => res.status(204).json(saved.picture))
+         })
+   } else {
+      cloudinary.uploader.destroy(req.user.picture.public_id)
+         .then((res) => {
+            User.findById(req.user.id)
+            .then((user) => {
+               user.picture = {
+                  url: null,
+                  public_id: null
+               }
+               user.save().then((saved) => res.status(204).json(saved.picture))
+            })
+         })
+   }
 
-   let uploadedPicture =  await cloudinary.uploader.destroy(req.user.picture.public_id)
-
-   User.findById(req.user.id)
-      .then((user) => {
-         user.picture = {
-            url: null,
-            public_id: null
-         }
-         user.save().then((saved) => res.status(204).json(saved.picture))
-      })
+   
 })
 
 

@@ -6,11 +6,14 @@ import {getCurrentProfile, deleteExperience, deleteEducation, deleteAccount} fro
 import {uploadPicture, deletePicture} from '../../store/reducers/actions/authActions'
 import isEmpty from '../../validation/isEmpty'
 import {Link} from 'react-router-dom'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 //import dumb components
 import ExperienceRow from '../common/ExperienceRow'
 import EducationRow from '../common/EducationRow'
 import Spinner from '../common/Spinner/Spinner'
 import ProfileLinks from './ProfileLinks'
+import UploadModal from './UploadModal'
+
 
 class Dashboard extends Component {
    constructor() {
@@ -43,6 +46,7 @@ class Dashboard extends Component {
 
    render() {
       const {current, loading} = this.props.profile
+      const {picture} = this.props.auth.user
       const hasProfile = !isEmpty(current)
       let dashContent;
 
@@ -53,13 +57,7 @@ class Dashboard extends Component {
             <div id="dashContent">
                <p className="lead text-muted">Welcome {this.props.auth.user.name}</p>
                {hasProfile ? (
-                  <ProfileLinks 
-                     auth={this.props.auth} 
-                     errors={this.props.errors}
-                     uploadPicture={this.props.uploadPicture}
-                     deletePicture={this.props.deletePicture}
-                  />
-
+                  <ProfileLinks />
                ) : (
                   <div className="btn-group mb-4" role="group">
                      <Link to="/dashboard/new" className="btn btn-light">
@@ -133,33 +131,57 @@ class Dashboard extends Component {
             <div className="container">
                <div className="row">
                   <div className="col-md-12">
-                     <h1 className="display-4">Dashboard</h1>
-                     {dashContent}
-                  {!loading && (<div id="deleteButton">
-                        <button className="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-                           Delete My Account
-                        </button>
-                        {/* Confirm Modal */}
-                        <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                           <div className="modal-dialog" role="document">
-                              <div className="modal-content" style={{zIndex: 2040}}>
-                                 <div className="modal-header">
-                                 <h5 className="modal-title text-center" id="exampleModalLabel">Are you sure?</h5>
-                                 <button type="button" id="closeModal" className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                 </button>
-                                 </div>
-                                 <div className="modal-body">
-                                 This action can NOT be undone.
-                                 </div>
-                                 <div className="modal-footer">
-                                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                 <button type="button" onClick={this.deleteClick} className="btn btn-danger">Delete Account</button>
-                                 </div>
+                  <div className="clearfix d-flex align-items-center">
+                     <div className="float-left mr-auto">
+                        <h1 className="display-4">Dashboard</h1>                        
+                     </div>
+                     <div className="float-right ml-auto">
+                        <button  type="button" className="btn btn-light btn-sm rounded" data-toggle="modal" data-target="#imageUploadModal">
+                           {(picture && !picture.url) && (
+                              <FontAwesomeIcon icon="plus" className="text-info" style={{padding: '2px'}}/>
+                           )}
+                           <FontAwesomeIcon icon="file-image" className="text-info mr-1"/>
+                           {(picture && picture.url) ? "Change Picture" : "Add Picture"}
+                        </button>                        
+                     </div>
+                  </div>
+                  {/* Upload Picture Modal */}
+                  <UploadModal 
+                     error={this.props.errors.nofile}
+                     picture={picture}
+                     uploadPicture={this.props.uploadPicture}
+                     deletePicture={this.props.deletePicture}
+                  />
+                  {/* Render dashContent */}
+                  {dashContent}
+                  {/* Render delete account button */}
+                  {!loading && (
+                  <div id="deleteButton">
+                     <button className="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                        Delete My Account
+                     </button>
+                     {/* Confirm Modal */}
+                     <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                           <div className="modal-content" style={{zIndex: 2040}}>
+                              <div className="modal-header">
+                              <h5 className="modal-title text-center" id="exampleModalLabel">Are you sure?</h5>
+                              <button type="button" id="closeModal" className="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                              </button>
+                              </div>
+                              <div className="modal-body">
+                              This action can NOT be undone.
+                              </div>
+                              <div className="modal-footer">
+                              <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                              <button type="button" onClick={this.deleteClick} className="btn btn-danger">Delete Account</button>
                               </div>
                            </div>
                         </div>
-                  </div>)}
+                     </div>
+                  </div>
+                  )}
                   </div>
                </div>
             </div>
