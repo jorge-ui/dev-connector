@@ -1,0 +1,32 @@
+// Auth
+export const REGISTER_USER = 'REGISTER_USER';
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const SET_UPLOADED_PICTURE = "SET_UPLOADED_PICTURE"
+export const DELETE_PICTURE = "DELETE_PICTURE"
+export const PICTURE_LOADING = "PICTURE_LOADING"
+
+// Profile
+export const GET_PROFILE = 'GET_PROFILE';
+export const CLEAR_CURRENT_PROFILE = 'CLEAR_CURRENT_PROFILE';
+export const PROFILE_LOADING = 'PROFILE_LOADING';
+export const CREATE_PROFILE = 'CREATE_PROFILE';
+export const PROFILE_NOT_FOUND = 'PROFILE_NOT_FOUND';
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const GET_ALL_PROFILES = 'GET_ALL_PROFILES';
+export const CLEAR_ALL_PROFILE = 'CLEAR_ALL_PROFILE';
+
+// Post
+export const POST_LOADING = 'POST_LOADING';
+export const GET_POST = 'GET_POST';
+export const GET_ALL_POSTS = 'GET_ALL_POSTS';
+export const ADD_POST = 'ADD_POST';
+export const DELETE_POST = 'DELETE_POST';
+export const TOGGLE_LIKE = 'TOGGLE_LIKE';
+export const CLEAR_POST = 'CLEAR_POST';
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const DELETE_COMMENT = 'DELETE_COMMENT';
+
+// Errors
+export const GET_ERRORS = 'GET_ERRORS';
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';
+

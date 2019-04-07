@@ -9,7 +9,7 @@ var commentSchema = new Schema({
       required: true
    },
    author: {
-      id: {
+      user: {
          type: Schema.Types.ObjectId,
          ref: "users"
       },

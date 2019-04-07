@@ -1,4 +1,3 @@
-var isEmpty = require('./isEmpty');
 var validator = require('validator');
 
 String.prototype.toCapitalize = function() {
@@ -17,7 +16,7 @@ module.exports = {
    },
    isLength: {
       list: ['body'],
-      range: {min: 10, max: 40},
+      range: {min: 10, max: 300},
       method: function (field, opts) {
          opts = this.range;
          return validator.isLength(field, opts)

@@ -17,15 +17,15 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 // Require routes
-var users = require('./routes/api/users');
-var profiles = require('./routes/api/profiles');
-var posts = require('./routes/api/posts');
-var comments = require('./routes/api/comments');
+var usersRoutes = require('./routes/api/users');
+var profilesRoutes = require('./routes/api/profiles');
+var postsRoutes = require('./routes/api/posts');
+var commentsRoutes = require('./routes/api/comments');
 
 //================================================
 // DATABASE SETUP
 // DB url
-if (process.env.DATABASEURL === undefined || process.env.DATABASEURL === null) {
+if (!process.env.DATABASEURL) {
    process.env.DATABASEURL = require('./config/keys').mongoURL;
 }
 // DB connect
@@ -39,19 +39,19 @@ mongoose.connect(process.env.DATABASEURL, {
    .catch(err => console.log(err));
 
 //================================================
+
 // Passport middleware
 app.use(passport.initialize());
 // Passport config strategy
 require('./config/passport')(passport);
-
 // Use routes
 app.get('/', (req, res) => res.json({
    msg: "Landing page"
 }));
-app.use('/api/users', users);
-app.use('/api/profiles', profiles);
-app.use('/api/posts', posts);
-app.use('/api/posts/:id/comments', comments);
+app.use('/api/users', usersRoutes);
+app.use('/api/profiles', profilesRoutes);
+app.use('/api/posts', postsRoutes);
+app.use('/api/posts/:id/comments', commentsRoutes);
 
 //================================================
 var PORT = process.env.PORT || 5500;

@@ -1,4 +1,8 @@
 /node_modules
+/uploads
+/client/node_modules
 /.vscode
+/.env
 package-lock.json
-seedDB
+seedDB.js
+/devconnector-theme

@@ -6,7 +6,9 @@ var Comment = require('../../models/Comment');
 var Post = require('../../models/Post');
 var isEmpty = require('../../validation/isEmpty');
 
-// Create
+// @route   POST api/post/:id/comments
+// @info    add a comment and associate with post
+// @acccess Private
 router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
    // Validate comment
    if(isEmpty(req.body.text)) {
@@ -16,7 +18,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
       var newComment = {};
       newComment.text = req.body.text;
       newComment.author = {
-         id: req.user.id,
+         user: req.user.id,
          name: req.user.name
       }
 
@@ -29,8 +31,16 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
                   // Push comment to post's comment array
                   foundPost.comments.push(comment)
                   // Save post
-                  foundPost.save().then((savedPost) => {
-                     res.json(savedPost)
+                  foundPost.save().then(() => {
+                     comment.populate({
+                        path: 'author.user',
+                        select: 'picture name _id',
+                        model: 'users'
+                     }).execPopulate()
+                        .then(comment => {
+                           res.status(201).json(comment)
+                        })
+                     
                   }).catch(err => console.log(err));
                })
                .catch(err => console.log(err));
@@ -38,7 +48,9 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
    }
 })
 
-// Update
+// @route   PUT api/post/:id/comments/:comment_id
+// @info    update an existing comment
+// @acccess Private
 router.put('/:comment_id', passport.authenticate('jwt', {session: false}), (req, res) => {
    // Validate comment
    if(isEmpty(req.body.text)) {
@@ -49,7 +61,8 @@ router.put('/:comment_id', passport.authenticate('jwt', {session: false}), (req,
          if(comment.author.id.toString() === req.user.id) {
             comment.text = req.body.text;
             comment.save()
-            .then(() => res.json({success: "Successfully updated"}))
+            //Success, responde with saved comment
+            .then((savedComment) => res.json(savedComment))
             .catch(err => console.log(err));
          } else {
             res.status(400).json({error: "Unathorized"})
@@ -59,13 +72,23 @@ router.put('/:comment_id', passport.authenticate('jwt', {session: false}), (req,
    }
 })
 
-// Delete
+// @route   DELETE api/post/:id/comments/:comment_id
+// @info    delete a comment
+// @acccess Private
 router.delete('/:comment_id', passport.authenticate('jwt', {session: false}), (req, res) => {
-   Comment.findById(req.params.comment_id)
-      .then((comment) => {
-         if(comment.author.id.toString() === req.user.id) {
-            comment.delete().then(() => res.json({success: "Comment was deleted"}))
-         } else res.status(400).json({error: "Unathorized"})
+   const {id: postId, comment_id: commentId} = req.params
+   Post.findById(postId)
+      .then((foundPost) => {
+         const {comments} = foundPost
+         comments.splice(comments.indexOf(commentId), 1)
+         foundPost.save().then(() => {
+            Comment.findById(commentId)
+               .then((comment) => {
+                  if(comment.author.user._id.toString() === req.user.id) {
+                     comment.delete().then(() => res.json({success: "Comment was deleted"}))
+                  } else res.status(401).json({error: "Unathorized"})
+               })
+         })
       })
 }) 
 
