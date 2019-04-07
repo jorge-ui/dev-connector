@@ -43,10 +43,7 @@ mongoose.connect(process.env.DATABASEURL, {
 app.use(passport.initialize());
 // Passport config strategy
 require('./config/passport')(passport);
-// Use routes
-app.get('/', (req, res) => res.json({
-   msg: "Landing page"
-}));
+
 app.use('/api/users', usersRoutes);
 app.use('/api/profiles', profilesRoutes);
 app.use('/api/posts', postsRoutes);
