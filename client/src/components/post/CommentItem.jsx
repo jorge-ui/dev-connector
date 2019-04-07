@@ -22,32 +22,35 @@ class CommentItem extends Component {
       const {comment, showDelete} = this.props
       const {loading} = this.state
       return (
-         <div className="comment-item card card-body mb-3">
+         <div className="comment-item card card-body mb-3 p-1">
             <div className="row">
-               <div className="col-md-2">
+               <div className="col-3 col-md-2">
                   <Link to={`/developers/${comment.author.user.handle}`}>
-                     <div className="square">
-                        <img className="rounded-circle d-none d-md-block squareImg" alt="" src={(comment.author.user.picture && comment.author.user.picture.url) || profileDefault}/>
-                     </div>
+                     <img className="rounded-circle d-block" alt="" src={(comment.author.user.picture && comment.author.user.picture.url) || profileDefault}/>
                   </Link>
-                  <br/>
                   <Link to={`/developers/${comment.author.user.handle}`} className="text-center d-block mx-auto">{comment.author.name}</Link>
                </div>
-               <div className="col-md-10">
-                  <p className="lead">{comment.text}</p>
-                  {showDelete && (
-                     <div>
-                        <button type="button" onClick={this.onDeleteComment.bind(this)} className="wrapper btn btn-danger mr-1">
-                           {loading ? (
-                              <span className="spinner-border text-light" role="status" style={{width: '20px', height: '20px'}}>
-                                 <span className="sr-only">Loading...</span>
-                              </span>
-                           ) : (
-                              <FontAwesomeIcon icon="trash-alt"/>                                 
-                           )}
-                        </button>
+               <div className="col-9 col-md-10">
+                  <div className="container-fluid d-flex flex-column justify-content-between h-100">
+                     <div className="row">
+                        <p className="lead">{comment.text}</p>                  
                      </div>
-                  )}
+                     {showDelete && (
+                        <div className="row mt-auto">
+                           <div className="mt-auto ml-auto">
+                              <button type="button" onClick={this.onDeleteComment.bind(this)} className="wrapper btn btn-danger">
+                                 {loading ? (
+                                    <span className="spinner-border text-light" role="status" style={{width: '20px', height: '20px'}}>
+                                       <span className="sr-only">Loading...</span>
+                                    </span>
+                                 ) : (
+                                    <FontAwesomeIcon icon="trash-alt"/>                                 
+                                 )}
+                              </button>
+                           </div>
+                        </div>
+                     )}
+                  </div>
                </div>
             </div>
          </div>

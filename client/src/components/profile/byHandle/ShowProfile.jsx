@@ -64,9 +64,9 @@ class ShowProfile extends Component {
                      <div className="float-left">
                         <Link to="/developers" className="btn btn-light mb-3">Back To Profiles</Link>
                      </div>
-                     {isAuthenticated && (user.id === profile.user._id) && (
+                     {(!isEmpty(profile)) && isAuthenticated && (user.id === profile.user._id) && (
                         <div className="float-right">
-                           <Link to="/dashboard/edit" className="btn btn-light mb-3">Edit My Profiles</Link>
+                           <Link to="/dashboard/edit" className="btn btn-light mb-3">Edit My Profile</Link>
                         </div>
                      )}
                   </div>

@@ -14,7 +14,6 @@ class Login extends Component {
          email: '',
          password: '',
          errors: {},
-         googleSignedIn: false
       }
       this._isMounted = false
       this.onChange = this.onChange.bind(this);
@@ -65,7 +64,7 @@ class Login extends Component {
    }
    
    render() {
-      var {errors, googleSignedIn} = this.state;
+      var {errors} = this.state;
       return (
          <div className="login">
             <div className="container">
@@ -102,7 +101,6 @@ class Login extends Component {
                            clientId="48398124661-gd6p9j8ad7sbrl5uvls2tbrsfi5pmidc.apps.googleusercontent.com"
                            onSuccess={this.responseGoogle.bind(this)}
                            onFailure={this.responseGoogle.bind(this)}
-                           buttonText={googleSignedIn ? 'Signed in' : 'Sign in with Google'}
                         />
                      </div>
                </div>

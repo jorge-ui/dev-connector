@@ -6,3 +6,4 @@
 package-lock.json
 seedDB.js
 /devconnector-theme
+/config/keys_dev.js

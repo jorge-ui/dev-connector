@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom' //to redirect
 import classnames from 'classnames'
 import {connect} from 'react-redux'
-import {registerUser} from '../../store/reducers/actions/authActions'
+import {registerUser, googleSignIn} from '../../store/reducers/actions/authActions'
 import InputFieldGroup from '../common/InputFieldGroup'
+import {GoogleLogin} from 'react-google-login'
+
 
 class Register extends Component {
    constructor() {
@@ -18,6 +20,10 @@ class Register extends Component {
       }
       this.onChange = this.onChange.bind(this);
       this.onSubmit = this.onSubmit.bind(this);
+   }
+
+   responseGoogle(googleUser) {
+      this.props.googleSignIn(googleUser)
    }
 
    componentDidMount() {      
@@ -100,6 +106,14 @@ class Register extends Component {
                            'disabled': this.props.auth.isLoading
                         })} />
                      </form>
+                        <div className="w-100 text-center mt-3"><em>or</em></div>
+                        <div className="d-flex justify-content-center mt-3">
+                           <GoogleLogin
+                              clientId="48398124661-gd6p9j8ad7sbrl5uvls2tbrsfi5pmidc.apps.googleusercontent.com"
+                              onSuccess={this.responseGoogle.bind(this)}
+                              onFailure={this.responseGoogle.bind(this)}
+                           />
+                        </div>
                   </div>
                   </div>
                </div>
@@ -111,6 +125,7 @@ class Register extends Component {
 
 Register.propTypes = {
    onRegisterUser: PropTypes.func.isRequired,
+   googleSignIn: PropTypes.func.isRequired,
    auth: PropTypes.object.isRequired,
    errors: PropTypes.object.isRequired
 }
@@ -120,7 +135,8 @@ const mapStateToProps = (state) => ({
    errors: state.errors
 })
 const mapActionsToProps = {
-   onRegisterUser: registerUser
+   onRegisterUser: registerUser,
+   googleSignIn
 }
 
 export default connect(

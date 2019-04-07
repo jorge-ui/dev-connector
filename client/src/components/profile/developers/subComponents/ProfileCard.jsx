@@ -16,7 +16,7 @@ const ProfileCard = ({
 }) => (
    <div className="card card-body bg-light mb-3">
       <div className="row">
-      <div className="col-2">
+      <div className="col-4 col-md-2">
          <Link to={`/developers/${user.handle}`}>
             <div className="square">
                <img

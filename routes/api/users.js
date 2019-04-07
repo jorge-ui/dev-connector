@@ -6,7 +6,6 @@ var keys = require('../../config/keys');
 var passport = require('passport');
 //models
 var User = require('../../models/User');
-var colors = require('colors');
 var Profile = require('../../models/Profile')
 var multer = require('multer')
 var upload = multer({'dest': 'uploads/'})
@@ -149,7 +148,7 @@ router.post('/login', async (req, res) => {
                      });
                   } else {
                      // password incorrect
-                     console.log("Password is incorrect".red)
+                     console.log("Password is incorrect")
                      return res.status(400).json({
                         password: "Password incorrect"
                      }); // password incorrect
