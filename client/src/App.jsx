@@ -43,7 +43,7 @@ if(localStorage.jwtToken) {
    if(currentTime > decoded.expired) {
       // Logout user
       store.dispatch(logoutUser())
-      // TODO: Clear current profile
+      // Clear current profile
       store.dispatch(clearCurrentProfile())
       // Redirect to login
       window.location.href = '/login'
