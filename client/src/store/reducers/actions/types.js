@@ -14,6 +14,9 @@ export const PROFILE_NOT_FOUND = 'PROFILE_NOT_FOUND';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const GET_ALL_PROFILES = 'GET_ALL_PROFILES';
 export const CLEAR_ALL_PROFILE = 'CLEAR_ALL_PROFILE';
+export const EXP_LOADING = 'EXP_LOADING';
+export const EDU_LOADING = 'EDU_LOADING';
+
 
 // Post
 export const POST_LOADING = 'POST_LOADING';

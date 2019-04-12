@@ -5,7 +5,9 @@ import { GET_PROFILE,
          CLEAR_CURRENT_PROFILE,
          UPDATE_PROFILE,
          GET_ALL_PROFILES,
-         CLEAR_ALL_PROFILE,} from './actions/types'
+         CLEAR_ALL_PROFILE,
+         EDU_LOADING,
+         EXP_LOADING,} from './actions/types'
 
 const initialState = {
    current: null,
@@ -67,7 +69,33 @@ export default function profileReducer(state = initialState, {type, payload}) {
             all: payload,
             loading: false
          }
-      
+
+      case EXP_LOADING:
+         return {
+            ...state,
+            current: {
+               ...state.current,
+               experience: state.current.experience.map((exp) => {
+                  if(exp._id === payload) {
+                     exp.loading = true
+                  }
+                  return exp
+               }),
+            }
+         }
+      case EDU_LOADING:
+         return {
+            ...state,
+            current: {
+               ...state.current,
+               education: state.current.education.map((edu) => {
+                  if(edu._id === payload) {
+                     edu.loading = true
+                  }
+                  return edu
+               }),
+            }
+         }
       default : return {...state}
    }
 }

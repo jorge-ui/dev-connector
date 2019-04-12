@@ -36,12 +36,12 @@ class Dashboard extends Component {
       this.props.getCurrentProfile()
    }
 
-   deleteExperience(e) {
-      this.props.deleteExperience(e.target.attributes.expid.value)
+   deleteExperience(id) {
+      this.props.deleteExperience(id)
    }
 
-   deleteEducation(e) {
-      this.props.deleteEducation(e.target.attributes.eduid.value)
+   deleteEducation(id) {
+      this.props.deleteEducation(id)
    }
 
    render() {
@@ -88,6 +88,7 @@ class Dashboard extends Component {
                                  key={exp._id}
                                  expid={exp._id}
                                  deleteExperience={this.deleteExperience}
+                                 loading={exp.loading}
                               />
                            )
                         })}
@@ -116,6 +117,7 @@ class Dashboard extends Component {
                                  key={edu._id}
                                  eduid={edu._id}
                                  deleteEducation={this.deleteEducation}
+                                 loading={edu.loading}
                               />
                            )
                         })}

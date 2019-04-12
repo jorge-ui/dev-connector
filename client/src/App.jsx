@@ -54,7 +54,18 @@ if(localStorage.jwtToken) {
 class App extends Component {
    componentDidMount() {
       if(localStorage.jwtToken) {
-         this.props.getCurrentUser()
+         const decoded = jwt_decode(localStorage.jwtToken)
+         let currentTime = Date.now / 1000;
+         if(currentTime > decoded.expired) {
+            // Logout user
+            store.dispatch(logoutUser())
+            // Clear current profile
+            store.dispatch(clearCurrentProfile())
+            // Redirect to login
+            window.location.href = '/login'
+         } else {
+            this.props.getCurrentUser()
+         }
       }
    }
    render() {      

@@ -44,7 +44,7 @@ class PostItem extends Component {
       let isLiked = post.likes.includes(userId)
       
       return (
-      <div className="card card-body mb-3">
+      <div className="card card-body mb-3" id={`post-${post._id}`}>
             <div className="row">
                <div className="col-12 d-block d-md-none">
                <div className="row">

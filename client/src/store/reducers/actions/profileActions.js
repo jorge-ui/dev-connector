@@ -8,7 +8,9 @@ import { GET_PROFILE,
          UPDATE_PROFILE,
          GET_ALL_PROFILES,
          CLEAR_ALL_PROFILE,
-         SET_CURRENT_USER,} from './types'
+         SET_CURRENT_USER,
+         EXP_LOADING,
+         EDU_LOADING,} from './types'
 
 import axios from 'axios'
 
@@ -188,26 +190,40 @@ export const addEducation = (newEducation) => (dispatch) => {
 
 // Delete experience
 export const deleteExperience = (expId) => (dispatch) => {
+   dispatch({
+      type: EXP_LOADING,
+      payload: expId,
+   })
    axios.delete(('/api/profiles/experience/' + expId))
       .then((res) => {
-         dispatch({
-            type: GET_PROFILE,
-            payload: {
-               current: res.data
-            }
+         let $ = window.jQuery;
+         $(`#tr-${expId}`).fadeOut(600, () => {
+            dispatch({
+               type: GET_PROFILE,
+               payload: {
+                  current: res.data
+               }
+            })
          })
       })
 }
 
 // Delete Education
 export const deleteEducation = (eduId) => (dispatch) => {
+   dispatch({
+      type: EDU_LOADING,
+      payload: eduId,
+   })
    axios.delete(('/api/profiles/education/' + eduId))
       .then((res) => {
-         dispatch({
-            type: GET_PROFILE,
-            payload: {
-               current: res.data
-            }
+         let $ = window.jQuery;
+         $(`#tr-${eduId}`).fadeOut(600, () => {
+            dispatch({
+               type: GET_PROFILE,
+               payload: {
+                  current: res.data
+               }
+            })
          })
       })
 }

@@ -65,10 +65,18 @@ export const clearPost = () => (dispatch) => {
 export const deletePost = (postId) => (dispatch) => {
    axios.delete(`/api/posts/${postId}`)
       .then((res) => {
-         dispatch({
-            type: DELETE_POST,
-            payload: postId
+         let $ = window.jQuery
+         $(`#post-${postId}`).animate({
+            height: 0
+         }, () => {
+            $(`#post-${postId}`).fadeOut(250, () => {
+               dispatch({
+                  type: DELETE_POST,
+                  payload: postId
+               })
+            })
          })
+         
       })
       .catch((err) => {
          dispatch({
