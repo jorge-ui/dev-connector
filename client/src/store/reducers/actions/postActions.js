@@ -66,8 +66,11 @@ export const deletePost = (postId) => (dispatch) => {
    axios.delete(`/api/posts/${postId}`)
       .then((res) => {
          let $ = window.jQuery
+         $(`#post-${postId} #profilePic`).fadeOut()
+         $(`#post-${postId} p em`).fadeOut()
          $(`#post-${postId}`).animate({
-            height: 0
+            height: 0,
+            padding: 0,
          }, () => {
             $(`#post-${postId}`).fadeOut(250, () => {
                dispatch({
@@ -124,10 +127,18 @@ export const addComment = (newComment, postId) => (dispatch) => {
 export const deleteComment =(postId, commentId) => (dispatch) => {
    axios.delete(`/api/posts/${postId}/comments/${commentId}`)
       .then((res) => {
-         dispatch({
-            type: DELETE_COMMENT,
-            payload: commentId,
+         let $ = window.jQuery
+         $(`#comment-${commentId} img`).fadeOut()
+         $(`#comment-${commentId}`).animate({
+            height: 0,
+            padding: 0,
+         }, () => {
+            dispatch({
+               type: DELETE_COMMENT,
+               payload: commentId,
+            })
          })
+         
       })
 }
 

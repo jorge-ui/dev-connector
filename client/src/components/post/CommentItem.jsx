@@ -22,7 +22,7 @@ class CommentItem extends Component {
       const {comment, showDelete} = this.props
       const {loading} = this.state
       return (
-         <div className="comment-item card card-body mb-3 p-1">
+         <div id={`comment-${comment._id}`} className="comment-item card card-body mb-3 p-1">
             <div className="row">
                <div className="col-3 col-md-2">
                   <Link to={`/developers/${comment.author.user.handle}`}>
