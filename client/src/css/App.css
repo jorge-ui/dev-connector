@@ -91,7 +91,7 @@ footer {
 }
 
 @media screen and (max-width: 576px) {
-   #mobile-nav {
+   /* #mobile-nav {
       background-color: #000000dc;
       z-index: 100;
       position: absolute;
@@ -100,6 +100,27 @@ footer {
       margin-top: 55px;
       width: 100%;
       padding: 15px;
+   } */
+   #dropdownMenu {
+     display: block;
+     z-index: -1;
+     margin-top: -5px;
+     height: 0;
+     opacity: 0;
+     overflow: hidden;
+     width: 50vw;
+     transition:
+      height 500ms,
+      opacity 400ms;
+   }
+   #dropdownMenuButton[aria-expanded=true] ~ #dropdownMenu {
+     height: 200px;
+     opacity: 1 !important;
+     z-index: 10 !important;
+   }
+   #dropdownMenu > *{
+     padding: 6px 20px;
+     font-weight: 600;
    }
 }
  

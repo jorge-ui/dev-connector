@@ -1,6 +1,8 @@
 import React from 'react'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
+import {FontAwesomeIcon as Icon} from '@fortawesome/react-fontawesome'
+import {faTwitter, faFacebook, faLinkedin, faYoutube, faInstagram} from '@fortawesome/free-brands-svg-icons'
 
 
 const InputFieldGroup = ({
@@ -25,7 +27,7 @@ const InputFieldGroup = ({
          <div className="input-group mb-3">
             <div className="input-group-prepend">
                <span className="input-group-text">
-               <i className={"fab fa-" + social}></i>
+                  <Icon icon={getSocialIcon(social)}/>
                </span>
             </div>
                <input
@@ -96,6 +98,17 @@ InputFieldGroup.defaultProps = {
    value: "",
    placeholder: "",
    rows: 5
+}
+
+function getSocialIcon(social) {
+   switch(social) {
+      case 'twitter'   : return faTwitter
+      case 'facebook'  : return faFacebook
+      case 'linkedin'  : return faLinkedin
+      case 'youtube'   : return faYoutube
+      case 'instagram' : return faInstagram
+      default          : break
+   }
 }
 
 export default InputFieldGroup

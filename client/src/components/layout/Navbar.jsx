@@ -40,7 +40,7 @@ class Navbar extends Component {
                   />
                </span> {user.name}
             </div>
-            <div className="dropdown-menu dropdown-menu-right shadow" aria-labelledby="dropdownMenuButton">
+            <div id="dropdownMenu" className="dropdown-menu dropdown-menu-right shadow" aria-labelledby="dropdownMenuButton">
                <Link className="dropdown-item" to="/dashboard">Dashboard</Link>
                <Link className={`dropdown-item ${!user.handle && "disabled"}`} to={`/developers/${user.handle}`}>My Profile</Link>
                <Link className="dropdown-item d-block d-md-none" to="/feed" style={{cursor: "pointer"}}>Posts Feed</Link>

@@ -49,10 +49,10 @@ class App extends Component {
    }
    render() {      
       return (
-         <Suspense fallback={<Spinner/>}>
-            <Router>
-               <div className="App">
-                  <Navbar auth={this.props.auth} profile={this.props.profile} logoutUser={this.props.logoutUser} clearCurrentProfile={this.props.clearCurrentProfile}/>
+         <Router>
+            <div className="App">
+               <Navbar auth={this.props.auth} profile={this.props.profile} logoutUser={this.props.logoutUser} clearCurrentProfile={this.props.clearCurrentProfile}/>
+               <Suspense fallback={<Spinner/>}>
                   <Route exact path="/" render={props => <Landing {...props}/>} />
                   <Route exact path="/register" render={props => <Register {...props}/>} />
                   <Route exact path="/login" render={props => <Login {...props}/>} />
@@ -80,10 +80,10 @@ class App extends Component {
                      <PrivateRoute exact path="/post/:id"
                         render={props => <ShowPost {...props}/>} auth={this.props.auth}/>
                   </Switch>
-                  <Footer/>
-               </div>
-            </Router>
-         </Suspense>
+               </Suspense>
+               <Footer/>
+            </div>
+         </Router>
       );
    }
 }
