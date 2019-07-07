@@ -6,7 +6,8 @@ var
    mongoose   = require('mongoose'),
    bodyParser = require('body-parser'),
    passport   = require('passport'),
-   path       = require('path');
+   path       = require('path'),
+   compression = require('compression');
 
 //================================================
 // APP CONFIG
@@ -41,6 +42,7 @@ mongoose.connect(process.env.DATABASEURL, {
 
 // Passport middleware
 app.use(passport.initialize());
+app.use(compression({ filter: shouldCompress }))
 // Passport config strategy
 require('./config/passport')(passport);
 
@@ -60,3 +62,15 @@ var PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
    console.log('App listening on port ' + PORT);
 });
+
+// Funtions definitions
+function shouldCompress (req, res) {
+   if (req.headers['x-no-compression']) {
+     // don't compress responses with this request header
+     return false
+   }
+  
+   // fallback to standard filter function
+   return compression.filter(req, res)
+ }
+ 
