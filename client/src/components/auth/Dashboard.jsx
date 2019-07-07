@@ -3,10 +3,11 @@ import dateFormat from 'dateformat'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {getCurrentProfile, deleteExperience, deleteEducation, deleteAccount} from '../../store/reducers/actions/profileActions'
-import {uploadPicture, deletePicture} from '../../store/reducers/actions/authActions'
+import {uploadPicture, deletePicture, setCurrentUser} from '../../store/reducers/actions/authActions'
 import isEmpty from '../../validation/isEmpty'
 import {Link} from 'react-router-dom'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {FontAwesomeIcon as Icon} from '@fortawesome/react-fontawesome'
+import {faPlus, faFileImage} from '@fortawesome/free-solid-svg-icons'
 //import dumb components
 import ExperienceRow from '../common/ExperienceRow'
 import EducationRow from '../common/EducationRow'
@@ -25,7 +26,8 @@ class Dashboard extends Component {
    }
 
    componentWillUnmount() {
-      document.querySelector("#closeModal").click()
+      let modal = document.querySelector("#closeModal")
+      modal && modal.click()
    }
    
    deleteClick() {
@@ -140,9 +142,9 @@ class Dashboard extends Component {
                      <div className="float-right ml-auto">
                         <button  type="button" className="btn btn-light btn-sm rounded" data-toggle="modal" data-target="#imageUploadModal">
                            {(picture && !picture.url) && (
-                              <FontAwesomeIcon icon="plus" className="text-info" style={{padding: '2px'}}/>
+                              <Icon icon={faPlus} className="text-info" style={{padding: '2px'}}/>
                            )}
-                           <FontAwesomeIcon icon="file-image" className="text-info mr-1"/>
+                           <Icon icon={faFileImage} className="text-info mr-1"/>
                            {(picture && picture.url) ? "Change Picture" : "Add Picture"}
                         </button>                        
                      </div>
@@ -217,6 +219,7 @@ const mapActionsToProps = {
    deleteAccount,
    uploadPicture,
    deletePicture,
+   setCurrentUser
 }
 
 export default connect(mapStateToProps, mapActionsToProps)(Dashboard)

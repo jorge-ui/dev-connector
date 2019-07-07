@@ -1,12 +1,12 @@
 //================================================
 // NPM PACKAGES
-var seedDB = require('./seedDB');
-   express = require('express'),
-   app = express(),
-   mongoose = require('mongoose'),
+var
+   express    = require('express'),
+   app        = express(),
+   mongoose   = require('mongoose'),
    bodyParser = require('body-parser'),
-   passport = require('passport'),
-   path = require('path');
+   passport   = require('passport'),
+   path       = require('path');
 
 //================================================
 // APP CONFIG
@@ -49,14 +49,11 @@ app.use('/api/profiles', profilesRoutes);
 app.use('/api/posts', postsRoutes);
 app.use('/api/posts/:id/comments', commentsRoutes);
 
-// Server static assets (for production build)
-if(process.env.NODE_ENV === 'production') {
-   // Set static folder
-   app.use(express.static('client/build'))
-   app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-   })
-}
+
+app.use(express.static('client/build'))
+app.get('*', (req, res) => {
+   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+})
 
 //================================================
 var PORT = process.env.PORT || 5500;

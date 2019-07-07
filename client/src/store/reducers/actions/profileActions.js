@@ -13,7 +13,7 @@ import { GET_PROFILE,
          EDU_LOADING,} from './types'
 
 import axios from 'axios'
-
+import jwt_decode from 'jwt-decode'
 //=====================================
 // ACTIONS
 //=====================================
@@ -85,15 +85,23 @@ const setPropfileLoading = () => {
 // Create profile
 export const createProfile = (newProfile) => (dispatch) => {
    axios.post('/api/profiles', newProfile)
-      .then((res) => {
+      .then(({data}) => {
          dispatch({
             type: CREATE_PROFILE,
             payload: {
-               current: res.data
+               current: data
             }
+         })
+         let {jwtToken} = localStorage
+         let decoded = jwt_decode(jwtToken)
+         let updated = {...decoded, handle: data.handle}
+         dispatch({
+            type: SET_CURRENT_USER,
+            payload: updated
          })
       })
       .catch((err) => {
+         console.log(err)
          dispatch({
             type: GET_ERRORS,
             payload: err.response.data

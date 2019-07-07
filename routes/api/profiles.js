@@ -55,58 +55,55 @@ router.get('/', (req, res) => {
 })
 
 // @route   CREATE
-// @info    Crate current user profile
+// @info    Crate new user profile
 // @access  Private
 router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
    var errors = {};
    // Empty profile fields obj
-   var profileFields = {};
+   var newProfile = {};
    // Associate user with profile
-   profileFields.user = req.user.id;
+   newProfile.user = req.user.id;
    // Validate input
    var validation = validateFields(req.body, require('../../validation/profileList'));
    // If not valid, return errors
    if(!validation.isValid) return res.status(400).json(validation.errors);
 
-   // Fill profileFields object
-   Object.keys(Profile.schema.obj).forEach((key) => {
-      switch (key) {
-         case 'skills': // Make array and trim
-            profileFields.skills = req.body.skills.split(',');
-            // Trim skills array
-            profileFields.skills = profileFields.skills.map((skill) => skill.trim())
-            break;
-         case 'social': // Make empty object and fill it
-            profileFields.social = {};
-            // Iterate through schema social object
-            Object.keys(Profile.schema.obj.social).forEach((socialLink) => {
-               // Fill the social obejct for each social link found in body field
-               if (req.body[socialLink]) profileFields.social[socialLink] = req.body[socialLink];
-            })
-            break;
-         default: // Defult check field in body and add to profileFields
-            if (req.body[key]) profileFields[key] = req.body[key];
-      }
-   })
+   // Check if handle exist
+   Profile.findOne({handle: newProfile.handle})
+   .then((profile) => {
 
-   // Check id handle exist
-   Profile.findOne({handle: profileFields.handle}).then((foundProfile) => {
-      if(foundProfile) {
+      if(profile) { // Handle already exist
          errors.handle = 'That handle alredy exist';
-         return res.status(400).json(errors); // Handle already exist
-      } else {
-         // Save handle to user model
-         User.findById(req.user.id)
-            .then((foundUser) => {
-               foundUser.handle = profileFields.handle
-               foundUser.save().then(() =>{
-                  // Create profile
-                  Profile.create(profileFields)
-                     .then((profile) => res.status(201).json(profile))// Success creating profile
-                     .catch(err => console.log(err));
-               })
-            })
+         return res.status(400).json(errors)
+      } 
+
+      // Fill profileFields object
+      for (let key in Profile.schema.obj) {
+         switch (key) {
+            case 'skills': // Make array and trim
+               newProfile.skills = req.body.skills.split(',').map((skill) => skill.trim())
+               break;
+            case 'social': // Make empty object and fill it
+               newProfile.social = {};
+               for (let social in Profile.schema.obj.social) {
+                  if (req.body[social]) newProfile.social[social] = req.body[social];
+               }
+               break;
+            default: // Defult check field in body and add to profileFields
+               if (req.body[key]) newProfile[key] = req.body[key];
+         }
       }
+
+      // Save handle to user model and create profile
+      User.findById(req.user.id)
+      .then((user) => {
+         user.handle = newProfile.handle
+         user.save().then(() =>{
+            Profile.create(newProfile)
+            .then((profile) => res.status(201).json(profile))// Success creating profile
+            .catch(err => console.log(err));
+         })
+      })
    }).catch((err) => console.log(err))
 })
 

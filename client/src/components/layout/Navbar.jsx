@@ -5,50 +5,46 @@ import profileDefault from '../common/profileDefault.png'
 
 
 class Navbar extends Component {
-   constructor() {
-      super()
 
-      this.logoutUserClick = this.logoutUserClick.bind(this)
-      this.onClick = this.onClick.bind(this)
-   }
-
-   logoutUserClick() {
+   logoutUserClick = () => {
       if(this.props.auth.user.googleId) {
          let auth2 = window.gapi.auth2.getAuthInstance();
-         auth2.signOut().then(function () {
+         auth2.signOut()
+         .then(() => {
             console.log('Google user signed out.')
             this.props.logoutUser()
-         }.bind(this));
+         })
       } else {
          this.props.logoutUser()
       }
    }
 
-   onClick() {
-      document.querySelector('.navbar-toggler').click()
+   onClick = (e) => {
+      e.preventDefault()
+      if(e.target.localName === 'a') {
+         !this.props.auth.isAuthenticated && document.querySelector('.navbar-toggler').click()
+      }
    }
 
-   render() {
+   render = () => {
       const {isAuthenticated, user} = this.props.auth;
       const dropdownMenu = (
          <div className="nav-item dropdown float-left">
             <div className="text-light btn bg-transparent nav-link dropdown-toggle" data-display="static" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span className="text-secondary">
+               <span className="text-secondary">
                   <img
                      src={(user.picture && user.picture.url) || profileDefault} 
                      className="rounded-circle d-inline-block"
-                     style={{width: 30, height: 30, marginLeft: '7px', border: '1px solid white'}}
+                     style={{width: 30, height: 30, marginLeft: '7px'}}
                      alt={"profilePic"}
                   />
                </span> {user.name}
             </div>
             <div className="dropdown-menu dropdown-menu-right shadow" aria-labelledby="dropdownMenuButton">
                <Link className="dropdown-item" to="/dashboard">Dashboard</Link>
-               {user.handle &&(
-                  <Link className="dropdown-item" to={`/developers/${user.handle}`}>My Profile</Link>
-               )}
+               <Link className={`dropdown-item ${!user.handle && "disabled"}`} to={`/developers/${user.handle}`}>My Profile</Link>
                <Link className="dropdown-item d-block d-md-none" to="/feed" style={{cursor: "pointer"}}>Posts Feed</Link>
-               <Link className="dropdown-item d-block d-md-none" onClick={this.onClick} to="/developers">Developers</Link>
+               <Link className="dropdown-item d-block d-md-none" to="/developers">Developers</Link>
 
                <div style={{cursor: "pointer"}} onClick={this.logoutUserClick} className="dropdown-item">Logout</div>
             </div>
@@ -68,16 +64,16 @@ class Navbar extends Component {
       const guestLinks = (
          <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-               <Link className="nav-link" onClick={this.onClick} to="/register">Sign Up</Link>
+               <Link className="nav-link" to="/register">Sign Up</Link>
             </li>
             <li className="nav-item">
-               <Link className="nav-link" onClick={this.onClick} to="/login">Login</Link>
+               <Link className="nav-link" to="/login">Login</Link>
             </li>
          </ul>
       );
 
       return (
-         <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
+         <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
             <div className="container d-flex align-items-center">
                <Link className="navbar-brand" to="/">DevConnector</Link>
                {this.props.auth.isAuthenticated && (<div className="ml-5 pl-2 d-inline-block d-md-none">
@@ -87,10 +83,10 @@ class Navbar extends Component {
                   <span className="navbar-toggler-icon"></span>
                </button>)}
          
-               <div className="collapse navbar-collapse" id="mobile-nav">
+               <div className="collapse navbar-collapse" id="mobile-nav" onClick={this.onClick}>
                   <ul className="navbar-nav mr-auto">
                      <li className="nav-item">
-                        <Link className="nav-link" onClick={this.onClick} to="/developers">Developers</Link>
+                        <Link className="nav-link" to="/developers">Developers</Link>
                      </li>
                   </ul>
                   {isAuthenticated ? authLinks : guestLinks}

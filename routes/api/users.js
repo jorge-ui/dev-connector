@@ -51,7 +51,7 @@ router.post('/register', (req, res) => {
             });
             // hash password
             bcrypt.genSalt(10, (err, salt) => {
-               if (err) throw err;
+               if (err) console.log(err);
                bcrypt.hash(newUser.password, salt, (err, hash) => {
                   newUser.password = hash;
                   // save newUser to DB
@@ -102,60 +102,54 @@ router.post('/login', async (req, res) => {
       }
      // Sign jwt token
      jwt.sign(payload, keys.jwtSecret, {expiresIn: "1h"}, (err, token) => {
-         if (err) throw err;
+         if (err) console.log(err);
          // send token
          return res.status(202).json({
             success: true,
-            token: "Bearer " + token
+            token: `Bearer ${token}`
          })
       });
+   } 
    // Regular sign in
-   } else {
+   else {
       // Validate register input
       var validation = validateLoginInput(req.body);
       if (validation.isValid === false) {
          return res.status(400).json(validation.errors); // validation error
       }
       // Find by email
-      User.findOne({
-            email: req.body.email
-         })
-         .then(async(foundUser) => {
-            const userProfile = await Profile.findOne({user: foundUser._id})
-            if (!foundUser) {
-               return res.status(404).json({
-                  email: "User not found"
-               }); // user not found
-            } else {
-               // compare password
-               bcrypt.compare(req.body.password, foundUser.password, (err, isMatch) => {
-                  if (isMatch) {
-                     // password correct, prepare jwt token
-                     var payload = {
-                        id: foundUser.id,
-                        name: foundUser.name,
-                        handle: userProfile && userProfile.handle,
-                        picture: foundUser && foundUser.picture
-                     };
-                     // sign jwt token
-                     jwt.sign(payload, keys.jwtSecret, {expiresIn: "1h"}, (err, token) => {
-                        if (err) throw err;
-                        // send token
-                        return res.status(202).json({
-                           success: true,
-                           token: "Bearer " + token
-                        })
-                     });
-                  } else {
-                     // password incorrect
-                     console.log("Password is incorrect")
-                     return res.status(400).json({
-                        password: "Password incorrect"
-                     }); // password incorrect
-                  }
-               });
+      User.findOne({ email: req.body.email })
+      .then((user) => {
+
+         if (!user) {
+            return res.status(404).json({ email: "User not found" }); // user not found
+         }
+
+         // compare password
+         bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+            
+            if (!isMatch) { // password incorrect
+               return res.status(400).json({ password: "Password incorrect" })
             }
+
+            // password correct, prepare jwt token
+            var payload = {
+               id: user.id,
+               name: user.name,
+               handle: user.handle,
+               picture: user.picture
+            };
+            // sign jwt token
+            jwt.sign(payload, keys.jwtSecret, {expiresIn: "1h"}, (err, token) => {
+               if (err) console.log(err);
+               // send token
+               return res.status(202).json({
+                  success: true,
+                  token: "Bearer " + token
+               })
+            });
          });
+      });
    }
 });
 

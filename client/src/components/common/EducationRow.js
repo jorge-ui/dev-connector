@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {FontAwesomeIcon as Icon} from '@fortawesome/react-fontawesome'
+import {faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 
 
 const EducationRow = ({
@@ -23,12 +24,12 @@ const EducationRow = ({
                      <span className="sr-only">Loading...</span>
                   </span>
                ) : (
-                  <FontAwesomeIcon icon="trash-alt"/>                                 
+                  <Icon icon={faTrashAlt}/>                                 
                   )}
             </button>
          </td>
       </tr>
-   )
+   );
 }
 
 EducationRow.propTypes = {

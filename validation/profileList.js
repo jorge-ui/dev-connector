@@ -8,32 +8,32 @@ String.prototype.toCapitalize = function() {
 module.exports = {
    required: {
       list: ['handle', 'status', 'skills'],
-      method: function (field) {
+      method(field) {
          return !validator.isEmpty(field);
       },
-      logError: function(field) {
+      logError(field) {
          return field.toCapitalize() + " is required"
       }
       },
    isLength: {
       list: ['handle'],
       range: {min: 2, max: 40},
-      method: function (field, opts) {
+      method(field, opts) {
          opts = this.range;
          return validator.isLength(field, opts)
       },
-      logError: function(field) {
+      logError(field) {
          let {min, max} = this.range;
          return field.toCapitalize() + " must be between "+min+" and "+max+" characters long"
       }
    },
    isURL: {
       list: ['linkedin','instagram','website','youtube','twitter','facebook'],
-      method: function (field) {
+      method (field) {
          if(isEmpty(field)) return true;
          else return validator.isURL(field);
       },
-      logError: function(field) {
+      logError(field) {
          return field.toCapitalize() + " link must be URL"
       }
    }
